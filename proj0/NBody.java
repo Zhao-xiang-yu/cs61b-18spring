@@ -1,5 +1,5 @@
 public class NBody {
-    public static String background_filename = "images/starfield.jpg";
+    private static String background_filename = "images/starfield.jpg";
     public static double readRadius(String file_path){
         In in = new In(file_path);
         int num = in.readInt();

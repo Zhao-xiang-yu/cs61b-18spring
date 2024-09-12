@@ -118,11 +118,11 @@ public class LinkedListDeque<T> {
         return current.data;
     }
 
-    private T getIndexRecursive(LinkNode current, int index){
+    private T getIndexRecursive(LinkNode current, int index) {
         if (index == 0) {
             return current.data;
         } else {
-            return getIndexRecursive(current.next, index-1);
+            return getIndexRecursive(current.next, index - 1);
         }
     }
 
@@ -134,5 +134,3 @@ public class LinkedListDeque<T> {
         return getIndexRecursive(head.next, index);
     }
 }
-
-

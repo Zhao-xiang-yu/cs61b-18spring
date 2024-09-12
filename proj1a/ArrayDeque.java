@@ -1,5 +1,5 @@
 public class ArrayDeque<T> {
-    public T[] items;
+    private T[] items;
     private int size;
     private int beginIdx;
     private int maxLength;
@@ -27,7 +27,7 @@ public class ArrayDeque<T> {
         }
     }
 
-    private void resize(int newLength, int beginIdx) {
+    private void resize(int newLength) {
         T[] newItems = (T[]) new Object[newLength];
         for (int i = 0; i < size; i++) {
             newItems[i] = items[(i + beginIdx) % maxLength];
@@ -38,19 +38,21 @@ public class ArrayDeque<T> {
     }
 
     private boolean needsShrink() {
-        if (size < MIN_SHRINK_LENGTH) {
+        if (maxLength <= MIN_SHRINK_LENGTH) {
             return false;
         }
-        return size / maxLength < USAGE_RATIO;
+        //System.out.println("size is " + size + ", Usage_Ratio * maxlength is " + USAGE_RATIO * maxLength);
+
+        return size < USAGE_RATIO * maxLength;
     }
 
     private void expand() {
-        resize(maxLength * EXPAND_RFACTOR, beginIdx);
+        resize(maxLength * EXPAND_RFACTOR);
     }
 
     private void shrink() {
         while (needsShrink()) {
-            resize (maxLength / SHRINK_RFACTOR, beginIdx);
+            resize (maxLength / SHRINK_RFACTOR);
         }
     }
 
@@ -91,6 +93,7 @@ public class ArrayDeque<T> {
             return null;
         } else {
             T item = items[beginIdx];
+            items[beginIdx] = null;
             beginIdx = (beginIdx + 1) % maxLength;
             size--;
             shrink();
@@ -103,6 +106,7 @@ public class ArrayDeque<T> {
             return null;
         } else {
             T item = items[(beginIdx + size - 1) % maxLength];
+            items[(beginIdx + size - 1) % maxLength] = null;
             size--;
             shrink();
             return item;

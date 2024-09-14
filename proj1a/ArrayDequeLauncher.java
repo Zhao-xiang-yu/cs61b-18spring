@@ -28,8 +28,13 @@ public class ArrayDequeLauncher {
             deque.addLast(i);
         }
 
-        for( int i = 0; i < 20; ++i) {
+        /**
+        for ( int i = 0; i < 20; ++i) {
             deque.removeFirst();
         }
+         */
+
+        ArrayDeque<Integer> deque2 = new ArrayDeque<>(deque);
+        deque2.printDeque();
     }
 }

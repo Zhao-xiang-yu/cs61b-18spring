@@ -1,4 +1,4 @@
-public class ArrayDeque<T> {
+public class ArrayDeque<T> implements Deque<T> {
     private T[] items;
     private int size;
     private int beginIdx;
@@ -22,7 +22,7 @@ public class ArrayDeque<T> {
         maxLength = otherSize * 2;
         items = (T[]) new Object[maxLength];
         beginIdx = 0;
-        for(int i = 0; i < otherSize; i++) {
+        for (int i = 0; i < otherSize; i++) {
             items[i] = other.get(i);
         }
     }
@@ -52,10 +52,11 @@ public class ArrayDeque<T> {
 
     private void shrink() {
         while (needsShrink()) {
-            resize (maxLength / SHRINK_RFACTOR);
+            resize(maxLength / SHRINK_RFACTOR);
         }
     }
 
+    @Override
     public void addFirst(T item) {
         if (size == maxLength) {
             expand();
@@ -65,22 +66,26 @@ public class ArrayDeque<T> {
         size++;
     }
 
+    @Override
     public void addLast(T item) {
-        if(size == maxLength) {
+        if (size == maxLength) {
             expand();
         }
         items[(beginIdx + size) % maxLength] = item;
         size++;
     }
 
+    @Override
     public boolean isEmpty() {
         return size == 0;
     }
 
+    @Override
     public int size() {
         return size;
     }
 
+    @Override
     public void printDeque() {
         for (int i = beginIdx; i < beginIdx + size; i++) {
             System.out.print(items[i % maxLength] + " ");
@@ -88,6 +93,7 @@ public class ArrayDeque<T> {
         System.out.println();
     }
 
+    @Override
     public T removeFirst() {
         if (size == 0) {
             return null;
@@ -101,6 +107,7 @@ public class ArrayDeque<T> {
         }
     }
 
+    @Override
     public T removeLast() {
         if (size == 0) {
             return null;
@@ -113,6 +120,7 @@ public class ArrayDeque<T> {
         }
     }
 
+    @Override
     public T get(int index) {
         if (size == 0 || index >= size || index < 0) {
             return null;

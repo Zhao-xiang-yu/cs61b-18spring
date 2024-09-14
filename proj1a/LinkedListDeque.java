@@ -1,4 +1,4 @@
-public class LinkedListDeque<T> {
+public class LinkedListDeque<T> implements Deque<T> {
     private class LinkNode {
         private LinkNode prev, next;
         private T data;
@@ -37,6 +37,28 @@ public class LinkedListDeque<T> {
         return newhead;
     }
 
+    public LinkedListDeque(LinkedListDeque<T> other) {
+        if (other.head == null) {
+            head = null;
+            size = other.size;
+        } else {
+            head = new LinkNode(other.head.data);
+            LinkNode ptr1 = head, ptr2 = other.head.next;
+            while (ptr2 != other.head) {
+                ptr1.next = new LinkNode(ptr2.data);
+                ptr1.next.prev = ptr1;
+                ptr1 = ptr1.next;
+                ptr2 = ptr2.next;
+            }
+            ptr1.next = head;
+            head.prev = ptr1;
+
+            size = other.size;
+        }
+
+    }
+
+    @Override
     public void addFirst(T data) {
         LinkNode originFirst = head.next;
         LinkNode newNode = new LinkNode(data);
@@ -48,6 +70,7 @@ public class LinkedListDeque<T> {
         size += 1;
     }
 
+    @Override
     public void addLast(T data) {
         LinkNode originLast = head.prev;
         LinkNode newNode = new LinkNode(data);
@@ -59,14 +82,17 @@ public class LinkedListDeque<T> {
         size += 1;
     }
 
+    @Override
     public boolean isEmpty() {
         return size == 0;
     }
 
+    @Override
     public int size() {
         return size;
     }
 
+    @Override
     public void printDeque() {
         LinkNode current = head.next;
         while (current != head) {
@@ -76,6 +102,7 @@ public class LinkedListDeque<T> {
         System.out.println();
     }
 
+    @Override
     public T removeFirst() {
         if (size == 0) {
             return null;
@@ -91,6 +118,7 @@ public class LinkedListDeque<T> {
         return data;
     }
 
+    @Override
     public T removeLast() {
         if (size == 0) {
             return null;
@@ -106,6 +134,7 @@ public class LinkedListDeque<T> {
         return data;
     }
 
+    @Override
     public T get(int index) {
         if (size == 0 || index < 0 || index >= size) {
             return null;

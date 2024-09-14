@@ -1,0 +1,165 @@
+public class LinkedListDeque<T> implements Deque<T> {
+    private class LinkNode {
+        private LinkNode prev, next;
+        private T data;
+
+        public LinkNode(T data) {
+            this.data = data;
+            this.prev = null;
+            this.next = null;
+        }
+    }
+
+    private LinkNode head;
+    private int size;
+
+    public LinkedListDeque() {
+        head = new LinkNode(null);
+        head.prev = head.next = head;
+    }
+
+    private LinkNode deepcopy(LinkNode target) {
+        if (target == null) {
+            return null;
+        }
+
+        LinkNode newhead = new LinkNode(target.data);
+        LinkNode ptr1 = newhead, ptr2 = target.next;
+        while (ptr2 != target) {
+            ptr1.next = new LinkNode(ptr2.data);
+            ptr1.next.prev = ptr1;
+            ptr1 = ptr1.next;
+            ptr2 = ptr2.next;
+        }
+        ptr1.next = newhead;
+        newhead.prev = ptr1;
+
+        return newhead;
+    }
+
+    public LinkedListDeque(LinkedListDeque<T> other) {
+        if (other.head == null) {
+            head = null;
+            size = other.size;
+        } else {
+            head = new LinkNode(other.head.data);
+            LinkNode ptr1 = head, ptr2 = other.head.next;
+            while (ptr2 != other.head) {
+                ptr1.next = new LinkNode(ptr2.data);
+                ptr1.next.prev = ptr1;
+                ptr1 = ptr1.next;
+                ptr2 = ptr2.next;
+            }
+            ptr1.next = head;
+            head.prev = ptr1;
+
+            size = other.size;
+        }
+
+    }
+
+    @Override
+    public void addFirst(T data) {
+        LinkNode originFirst = head.next;
+        LinkNode newNode = new LinkNode(data);
+        head.next = newNode;
+        newNode.prev = head;
+        newNode.next = originFirst;
+        originFirst.prev = newNode;
+
+        size += 1;
+    }
+
+    @Override
+    public void addLast(T data) {
+        LinkNode originLast = head.prev;
+        LinkNode newNode = new LinkNode(data);
+        head.prev = newNode;
+        newNode.next = head;
+        newNode.prev = originLast;
+        originLast.next = newNode;
+
+        size += 1;
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return size == 0;
+    }
+
+    @Override
+    public int size() {
+        return size;
+    }
+
+    @Override
+    public void printDeque() {
+        LinkNode current = head.next;
+        while (current != head) {
+            System.out.print(current.data + " ");
+            current = current.next;
+        }
+        System.out.println();
+    }
+
+    @Override
+    public T removeFirst() {
+        if (size == 0) {
+            return null;
+        }
+
+        T data = head.next.data;
+        LinkNode newFirst = head.next.next;
+        newFirst.prev = head;
+        head.next = newFirst;
+
+        size -= 1;
+
+        return data;
+    }
+
+    @Override
+    public T removeLast() {
+        if (size == 0) {
+            return null;
+        }
+
+        T data = head.prev.data;
+        LinkNode newLast = head.prev.prev;
+        newLast.next = head;
+        head.prev = newLast;
+
+        size -= 1;
+
+        return data;
+    }
+
+    @Override
+    public T get(int index) {
+        if (size == 0 || index < 0 || index >= size) {
+            return null;
+        }
+
+        LinkNode current = head.next;
+        for (int i = 0; i < index; i++) {
+            current = current.next;
+        }
+        return current.data;
+    }
+
+    private T getIndexRecursive(LinkNode current, int index) {
+        if (index == 0) {
+            return current.data;
+        } else {
+            return getIndexRecursive(current.next, index - 1);
+        }
+    }
+
+    public T getRecursive(int index) {
+        if (size == 0 || index < 0 || index >= size) {
+            return null;
+        }
+
+        return getIndexRecursive(head.next, index);
+    }
+}
